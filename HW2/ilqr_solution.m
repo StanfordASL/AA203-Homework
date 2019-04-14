@@ -72,7 +72,7 @@ end
 
 
 
-function [l,L,p,P] = backward_riccati_recursion(P,p,A,B,Q,q,R,r)
+function [l,L,P,p] = backward_riccati_recursion(P,p,A,B,Q,q,R,r)
 % TODO: write backward riccati recursion step, 
 % return controller terms l,L and value terms p,P
 % refer to lecture 4 slides
