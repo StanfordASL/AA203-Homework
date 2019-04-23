@@ -1,4 +1,4 @@
-function uOpt = optCtrl(obj, ~, ~, deriv, uMode)
+function uOpt = optCtrl(obj, ~, x, deriv, uMode)
 % uOpt = optCtrl(obj, t, y, deriv, uMode)
 
 %% Input processing
@@ -12,9 +12,9 @@ end
 
 %% Optimal control
 if strcmp(uMode, 'min')
-  uOpt = ((deriv{obj.dims==2}/obj.x[3] - obj.b*deriv{obj.dims==3})<0)*obj.uMax;
+  uOpt = ((deriv{obj.dims==2}./x{3} - obj.b*deriv{obj.dims==3})<0)*obj.uMax;
 elseif strcmp(uMode, 'max')
-  uOpt = ((deriv{obj.dims==2}/obj.x[3] - obj.b*deriv{obj.dims==3})>=0)*obj.uMax;
+  uOpt = ((deriv{obj.dims==2}./x{3} - obj.b*deriv{obj.dims==3})>=0)*obj.uMax;
 else
   error('Unknown uMode!')
 end
