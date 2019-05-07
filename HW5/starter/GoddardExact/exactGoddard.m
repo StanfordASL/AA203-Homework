@@ -26,7 +26,7 @@ m0 = 12000; mf = 1000;
 b = 1e-3; uMax = 1.2e5;
 
 % Parameters for the dichotomic search.
-% For given initial times tA, tB such that v(tA) < 0, v(tB) > 0,
+% For given initial times tA, tB such that v(tA) > 0, v(tB) < 0,
 % we iteratively evaluate v at tMed = (tA + tB)/2 until we find
 % v(tMed) = 0. Therefore: tf = tMed.
 tA = 1.;
@@ -40,7 +40,7 @@ iterDichotomyMax = 1000;
 epsDichotomy = 1e-1;
 
 if dichotomyFuncTA < 0 || dichotomyFuncTB > 0
-    fprintf('Wrong guess times tA and tB! Choose them such that: tA > 0 and tB < 0...\n',iterDichotomy);
+    fprintf('Wrong guess times tA and tB! Choose them such that: v(tA) > 0 and v(tB) < 0...\n',iterDichotomy);
 else
     % Classical dichotomic/binary/bisection search
     while ( abs(dichotomyFuncTMed) > epsDichotomy && iterDichotomy < iterDichotomyMax )
