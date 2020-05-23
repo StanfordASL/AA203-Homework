@@ -50,12 +50,4 @@ class cost:
     
     def evaluate(self,x,u):
         return x @ self.Q @ x + u @ self.R @ u
-
-# Riccati recursion
-def Riccati(A,B,Q,R):
-    P = np.zeros((4,4))
-    for t in range(40):
-        P = gamma*P
-        L = np.linalg.inv(R + B.T @ P @ B) @ B.T @ P @ A
-        P = Q + L.T @ R @L + (A - B @ L).T @ P @ (A - B @ L)
-    return L,P
+        
