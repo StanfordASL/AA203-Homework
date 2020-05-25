@@ -1,4 +1,4 @@
-from model import dynamics, cost, Riccati
+from model import dynamics, cost
 import numpy as np
 
 dynfun = dynamics(stochastic=False)
