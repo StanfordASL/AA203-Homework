@@ -55,7 +55,7 @@ class Policy(nn.Module):
         """
         # TODO map input to:
         # mean of action distribution,
-        # variance of action distribution (pass this through a non-negative function),
+        # variance of action distribution (pass this through a strictly positive function),
         # state value
         
         return 0.5*action_mean, 0.5*action_var, state_values
