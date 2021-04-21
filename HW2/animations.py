@@ -36,10 +36,12 @@ def animate_cartpole(t, x, θ):
 
     # Figure and axis
     fig, ax = plt.subplots(dpi=100)
-    x_lim = 5. #1.1*np.max(np.abs(x))
-    y_lim = 1.1*(wheel_radius + cart_height + pole_length)
-    ax.set_xlim([-1.1*x_lim, 1.1*x_lim])
-    ax.set_ylim([0., y_lim])
+    x_min, x_max = np.min(x) - 1.1*pole_length, np.max(x) + 1.1*pole_length
+    y_min = -pole_length
+    y_max = 1.1*(wheel_radius + cart_height + pole_length)
+    ax.plot([x_min, x_max], [0., 0.], '-', linewidth=1, color='k')[0]
+    ax.set_xlim([x_min, x_max])
+    ax.set_ylim([y_min, y_max])
     ax.set_yticks([])
     ax.set_aspect(1.)
 
@@ -52,7 +54,7 @@ def animate_cartpole(t, x, θ):
     mass = mpatches.Circle((0., 0.), mass_radius, color='k')
     pole = ax.plot([], [], '-', linewidth=3, color='k')[0]
     trace = ax.plot([], [], '--', linewidth=2, color='tab:orange')[0]
-    timestamp = ax.text(-x_lim, 0.8*y_lim, '')
+    timestamp = ax.text(0.1, 0.9, '', transform=ax.transAxes)
 
     ax.add_patch(cart)
     ax.add_patch(wheel_left)
