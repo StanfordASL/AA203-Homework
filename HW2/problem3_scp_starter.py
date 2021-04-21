@@ -86,7 +86,7 @@ if __name__ == '__main__':
     goal_state = np.array([0,np.pi,0,0])    # desired upright pendulum state
     start_state = np.array([0,0,0,0])       # initial downright pendulum state
     dt = 0.1                                # discrete time resolution
-    T = 7.5                                 # total simulation time    
+    T = 8                                   # total simulation time    
 
     # specify cost function
     Qf = 1000.*np.eye(4)                    # terminal state cost matrix
