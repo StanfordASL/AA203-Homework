@@ -91,7 +91,7 @@ if __name__ == '__main__':
     # specify cost function
     Qf = 1000.*np.eye(4)                    # terminal state cost matrix
     Q = np.diag(np.array([10,10,2,2]))      # state cost matrix
-    R = np.eye(1)                           # control cost matrix
+    R = 2.5*np.eye(1)                       # control cost matrix
 
     # specify cartpole dynamics
     f = jax.jit(cartpole)
@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
     # scp parameters 
     rho = 0.5                               # trust region parameter
-    uLB = -3.5                              # control effort lower bound
+    uLB = -5.                               # control effort lower bound
     uUB = 3.                                # control effort upper bound
 
     # solve swing-up with scp
