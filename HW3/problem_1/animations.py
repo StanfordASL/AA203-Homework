@@ -12,7 +12,7 @@ import matplotlib.transforms as mtransforms
 import matplotlib.animation as animation
 
 
-def animate_planar_quad(t, x, y, θ, title_string=None):
+def animate_planar_quad(t, x, y, θ, title_string=None, display_in_notebook=False):
     """Animate the planar quadrotor system from given position data.
     All arguments are assumed to be 1-D NumPy arrays, where `x`, `y`, and `θ`
     are the degrees of freedom of the planar quadrotor over time `t`.
@@ -104,10 +104,11 @@ def animate_planar_quad(t, x, y, θ, title_string=None):
                                   fargs=(t[::step], x[::step], y[::step], θ[::step]),
                                   interval=step * dt * 1000,
                                   blit=True)
-    try:
-        get_ipython()
-        from IPython.display import HTML
-        ani = HTML(ani.to_html5_video())
-    except (NameError, ImportError):
-        pass
+    if display_in_notebook:
+        try:
+            get_ipython()
+            from IPython.display import HTML
+            ani = HTML(ani.to_html5_video())
+        except (NameError, ImportError):
+            raise RuntimeError("`display_in_notebook = True` requires this code to be run in jupyter/colab.")
     return fig, ani
