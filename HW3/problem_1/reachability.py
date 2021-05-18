@@ -124,14 +124,22 @@ def test_optimal_control(n=10, seed=0):
     grad_values = np.random.normal(size=(n, 4))
     try:
         for state, grad_value in zip(states, grad_values):
+            opt_hamiltonian_value = grad_value @ planar_quadrotor.dynamics(state, optimal_control(state, grad_value))
             for T_1 in (planar_quadrotor.min_thrust_per_prop, planar_quadrotor.max_thrust_per_prop):
                 for T_2 in (planar_quadrotor.min_thrust_per_prop, planar_quadrotor.max_thrust_per_prop):
-                    assert (grad_value @ planar_quadrotor.dynamics(state, optimal_control(state, grad_value)) <=
-                            grad_value @ planar_quadrotor.dynamics(state, np.array([T_1, T_2])) + 1e-4)
-    except (jax.errors.JAXTypeError, jax.errors.JAXIndexError):
+                    hamiltonian_value = grad_value @ planar_quadrotor.dynamics(state, np.array([T_1, T_2]))
+                    if opt_hamiltonian_value > hamiltonian_value + 1e-4:
+                        raise ValueError(
+                            "Check your logic for `PlanarQuadrotor.optimal_control`; with "
+                            f"`state` {state} and `grad_value` {grad_value}, got optimal control"
+                            f"{optimal_control(state, grad_value)} with corresponding Hamiltonian value "
+                            f"{opt_hamiltonian_value:7.4f} but {np.array([T_1, T_2])} has a lower corresponding "
+                            f"value {hamiltonian_value:7.4f}.")
+    except (jax.errors.JAXTypeError, jax.errors.JAXIndexError, AssertionError) as e:
         print("`PlanarQuadrotor.optimal_control` must be implemented using only `jnp` operations; "
               "`np` may only be used for constants, "
               "and `jnp.where` must be used instead of native python control flow (`if`/`else`).")
+        raise e
 
 
 def test_target_set():
@@ -149,13 +157,20 @@ def test_target_set():
             # feel free to add test cases
         ]
         for x in in_states:
-            assert target_set(x) < 0
+            if target_set(x) > 0:
+                raise ValueError(
+                    f"Check your logic for `target_set`; for `state` {x} (in) you have target_set(state) = "
+                    f"{target_set(x)}.")
         for x in out_states:
-            assert target_set(x) > 0
-    except (jax.errors.JAXTypeError, jax.errors.JAXIndexError):
+            if target_set(x) < 0:
+                raise ValueError(
+                    f"Check your logic for `target_set`; for `state` {x} (out) you have target_set(state) = "
+                    f"{target_set(x)}.")
+    except (jax.errors.JAXTypeError, jax.errors.JAXIndexError, AssertionError) as e:
         print("`target_set` must be implemented using only `jnp` operations, "
               "`np` may only be used for constants, "
               "and `jnp.where` must be used instead of native python control flow (`if`/`else`).")
+        raise e
 
 
 def test_envelope_set():
@@ -172,13 +187,20 @@ def test_envelope_set():
             # feel free to add test cases
         ]
         for x in in_states:
-            assert envelope_set(x) < 0
+            if envelope_set(x) > 0:
+                raise ValueError(
+                    f"Check your logic for `envelope_set`; for `state` {x} (in) you have envelope_set(state) = "
+                    f"{envelope_set(x)}.")
         for x in out_states:
-            assert envelope_set(x) > 0
-    except (jax.errors.JAXTypeError, jax.errors.JAXIndexError):
+            if envelope_set(x) < 0:
+                raise ValueError(
+                    f"Check your logic for `envelope_set`; for `state` {x} (out) you have envelope_set(state) = "
+                    f"{envelope_set(x)}.")
+    except (jax.errors.JAXTypeError, jax.errors.JAXIndexError, AssertionError) as e:
         print("`envelope_set` must be implemented using only `jnp` operations, "
               "`np` may only be used for constants, "
               "and `jnp.where` must be used instead of native python control flow (`if`/`else`).")
+        raise e
 
 
 test_optimal_control()
