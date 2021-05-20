@@ -94,7 +94,7 @@ def target_set(state):
         state: An unbatched (!) state vector, an array of shape `(4,)` containing `[y, v_y, phi, omega]`.
 
     Returns:
-        A scalar, nonnegative iff the state is in the target set.
+        A scalar, nonpositive iff the state is in the target set.
     """
     # PART (b): WRITE YOUR CODE BELOW ###############################################
     raise NotImplementedError
@@ -109,7 +109,7 @@ def envelope_set(state):
         state: An unbatched (!) state vector, an array of shape `(4,)` containing `[y, v_y, phi, omega]`.
 
     Returns:
-        A scalar, nonnegative iff the state is in the operational envelope.
+        A scalar, nonpositive iff the state is in the operational envelope.
     """
     # PART (c): WRITE YOUR CODE BELOW ###############################################
     raise NotImplementedError
@@ -124,6 +124,8 @@ def test_optimal_control(n=10, seed=0):
     grad_values = np.random.normal(size=(n, 4))
     try:
         for state, grad_value in zip(states, grad_values):
+            if not jnp.issubdtype(optimal_control(state, grad_value).dtype, jnp.floating):
+                raise ValueError("`PlanarQuadrotor.optimal_control` must return a `float` array (i.e., not `int`).")
             opt_hamiltonian_value = grad_value @ planar_quadrotor.dynamics(state, optimal_control(state, grad_value))
             for T_1 in (planar_quadrotor.min_thrust_per_prop, planar_quadrotor.max_thrust_per_prop):
                 for T_2 in (planar_quadrotor.min_thrust_per_prop, planar_quadrotor.max_thrust_per_prop):
@@ -157,12 +159,14 @@ def test_target_set():
             # feel free to add test cases
         ]
         for x in in_states:
+            if not jnp.issubdtype(target_set(x).dtype, jnp.floating):
+                raise ValueError("`target_set` must return a `float` scalar (i.e., not `int`).")
             if target_set(x) > 0:
                 raise ValueError(
                     f"Check your logic for `target_set`; for `state` {x} (in) you have target_set(state) = "
                     f"{target_set(x)}.")
         for x in out_states:
-            if target_set(x) < 0:
+            if target_set(x) <= 0:
                 raise ValueError(
                     f"Check your logic for `target_set`; for `state` {x} (out) you have target_set(state) = "
                     f"{target_set(x)}.")
@@ -187,12 +191,14 @@ def test_envelope_set():
             # feel free to add test cases
         ]
         for x in in_states:
+            if not jnp.issubdtype(envelope_set(x).dtype, jnp.floating):
+                raise ValueError("`envelope_set` must return a `float` scalar (i.e., not `int`).")
             if envelope_set(x) > 0:
                 raise ValueError(
                     f"Check your logic for `envelope_set`; for `state` {x} (in) you have envelope_set(state) = "
                     f"{envelope_set(x)}.")
         for x in out_states:
-            if envelope_set(x) < 0:
+            if envelope_set(x) <= 0:
                 raise ValueError(
                     f"Check your logic for `envelope_set`; for `state` {x} (out) you have envelope_set(state) = "
                     f"{envelope_set(x)}.")
