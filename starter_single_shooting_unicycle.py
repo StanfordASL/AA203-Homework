@@ -94,7 +94,7 @@ def pmp_trajectories(x0: jnp.array,
             solution values.
 
     Returns:
-        A tuple of arrays `(ts, xs, ps)` where:
+        A tuple of arrays `(ts, xs, us, ps)` where:
             ts: An array of shape (N,) containing a sequence of times
                 spanning `[0, T]`.
             xs: An array of shape (N, 3) containing the states at `ts`.
