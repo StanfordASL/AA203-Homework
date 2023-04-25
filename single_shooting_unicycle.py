@@ -1,4 +1,5 @@
-"""Starter code for the problem "Single shooting for a unicycle".
+"""
+Starter code for the problem "Single shooting for a unicycle".
 
 Autonomous Systems Lab (ASL), Stanford University
 """
