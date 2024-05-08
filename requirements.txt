@@ -5,3 +5,4 @@ matplotlib
 jax
 jaxlib
 tqdm
+hj-reachability
