@@ -6,3 +6,5 @@ jax
 jaxlib
 tqdm
 hj-reachability
+plotly
+
