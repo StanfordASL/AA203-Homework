@@ -340,7 +340,7 @@ def optimal_trajectory(full_state, dt=1 / 100, T=5):
     return t, np.array(full_states)
 
 
-def animate_optimal_trajectory(full_state, dt=1 / 100, T=5, display_in_notebook=False):
+def animate_optimal_trajectory(full_state, dt=1 / 100, T=5):
     t, full_states = optimal_trajectory(full_state, dt, T)
     value = grid.interpolate(values, full_state[2:])
     fig, anim = animate_planar_quad(
@@ -348,8 +348,6 @@ def animate_optimal_trajectory(full_state, dt=1 / 100, T=5, display_in_notebook=
         full_states[:, 0],
         full_states[:, 2],
         full_states[:, 4],
-        f"V = {value:7.4f}",
-        display_in_notebook=display_in_notebook,
     )
     return fig, anim
 
