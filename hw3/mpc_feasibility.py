@@ -43,7 +43,7 @@ def do_mpc(
     # END PART (a) ############################################################
 
     prob = cvx.Problem(cvx.Minimize(cost), constraints)
-    prob.solve()
+    prob.solve(cvx.CLARABEL)
     x = x_cvx.value
     u = u_cvx.value
     status = prob.status
